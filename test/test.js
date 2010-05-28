@@ -65,6 +65,41 @@ test("teardown must be called after test ended", function() {
 		start();
 	}, 13);
 });
+
+module("async setup test", {
+	setup: function() {
+	  console.log('setup');
+	  stop();
+		setTimeout(function(){
+	    ok(true);
+	    console.log('start setup');
+		  start();
+		}, 500);
+	}
+});
+
+asyncTest("module with async setup", function() {
+  console.log('test');
+	expect(2);
+	ok(true);
+	start();
+});
+
+module("async teardown test", {
+	teardown: function() {
+  	stop();
+		setTimeout(function(){
+	    ok(true);
+		  start();
+		}, 500);
+	}
+});
+
+asyncTest("module with async teardown", function() {
+	expect(2);
+	ok(true);
+	start();
+});
 } // end setTimeout tests
 
 if (typeof asyncTest !== 'undefined') {
@@ -168,4 +203,4 @@ test("jsDump output", function() {
 	equals( QUnit.jsDump.parse({top: 5, left: 0}), "{ \"top\": 5, \"left\": 0 }" );
 	equals( QUnit.jsDump.parse(document.getElementById("qunit-header")), "<h1 id=\"qunit-header\"></h1>" );
 	equals( QUnit.jsDump.parse(document.getElementsByTagName("h1")), "[ <h1 id=\"qunit-header\"></h1> ]" );
-})
+});
